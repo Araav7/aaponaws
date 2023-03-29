@@ -1,8 +1,6 @@
 ---
 
 - hosts: 10.1.0.30
-  gather_facts: no
-  connection: ssh
   name: List the contents of home directory
 
   tasks:
