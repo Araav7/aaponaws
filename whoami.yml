@@ -1,8 +1,10 @@
 ---
 
-- hosts: 10.1.0.30
-  name: List the contents of home directory
-
+- name: List the contents of home directory
+  hosts: 10.1.0.30
+  connection: ssh
+  gather_facts: no 
+  
   tasks:
           - name: List files and folder in home directory
             shell: 'ls -l'
