@@ -1,6 +1,6 @@
 - name: Echo 
-  hosts: 127.0.0.1
-  connection: local
+  hosts: 10.1.0.30
+  connection: ssh
 
   tasks:
   - name: Print debug message
