@@ -1,4 +1,7 @@
 - hosts: 10.1.0.30
+  gather_facts: no
+  connection: ssh
+  
   tasks:
     - name: Print the actual user
       command: whoami
