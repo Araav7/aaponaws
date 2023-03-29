@@ -1,5 +1,5 @@
 - name: Echo 
-  hosts: 10.1.0.30
+  hosts: 10.0.1.30
   connection: ssh
   gather_facts: no
 
