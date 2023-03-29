@@ -1,7 +1,14 @@
+---
+
 - hosts: 10.1.0.30
   gather_facts: no
   connection: ssh
-  
+  name: List the contents of home directory
+
   tasks:
-    - name: Print the actual user
-      command: whoami
+          - name: List files and folder in home directory
+            shell: 'ls -l'
+           register: command_output
+
+                      - debug:
+                var: command_output.stdout_lines
