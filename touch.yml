@@ -1,4 +1,7 @@
 - hosts: 10.1.0.30
+  connection: ssh
+  gather_facts: no 
+  
   tasks:
   - name: Creating an empty file
     file:
