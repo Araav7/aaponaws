@@ -1,11 +1,4 @@
----
-- name: Apache server installed
-  hosts: all
-  connection: ssh
-  gather_facts: no 
-  
+- hosts: all
   tasks:
-  - name: latest Apache version installed
-    yum:
-      name: httpd
-      state: latest
+    - name: Print the actual user
+      command: whoami
