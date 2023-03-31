@@ -1,4 +1,3 @@
----
 
 - name: "JBoss Web Server installation and configuration"
 
@@ -10,4 +9,4 @@
 
 – middleware_automation.jws
 
-  tasks :
+  tasks:
