@@ -1,0 +1,13 @@
+---
+
+- name: "JBoss Web Server installation and configuration"
+
+  hosts: 10.1.0.30
+
+  become: yes
+
+  collections:
+
+– middleware_automation.jws
+
+  tasks :
