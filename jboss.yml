@@ -1,0 +1,41 @@
+---
+- name: Install JBoss EAP
+  hosts: all
+  become: true
+  vars:
+    jboss_home: /opt/jboss-eap
+    jboss_user: jboss
+    jboss_group: jboss
+    jboss_version: 7.3.0
+    jboss_download_url: http://download.jboss.org/wildfly/{{ jboss_version }}/wildfly-{{ jboss_version }}.tar.gz
+  tasks:
+    - name: Create JBoss user and group
+      group:
+        name: "{{ jboss_group }}"
+        state: present
+      user:
+        name: "{{ jboss_user }}"
+        comment: "JBoss EAP User"
+        group: "{{ jboss_group }}"
+        createhome: yes
+    - name: Download JBoss EAP
+      get_url:
+        url: "{{ jboss_download_url }}"
+        dest: /tmp/wildfly-{{ jboss_version }}.tar.gz
+    - name: Extract JBoss EAP
+      unarchive:
+        src: /tmp/wildfly-{{ jboss_version }}.tar.gz
+        dest: "{{ jboss_home }}"
+        remote_src: true
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
+    - name: Set JBoss EAP ownership and permissions
+      file:
+        path: "{{ jboss_home }}"
+        state: directory
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
+        mode: "0755"
+        recurse: yes
+    - name: Start JBoss EAP
+      command: "{{ jboss_home }}/bin/standalone.sh -b 0.0.0.0"
