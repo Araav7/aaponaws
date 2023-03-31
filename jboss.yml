@@ -1,41 +1,67 @@
----
-- name: Install JBoss EAP
-  hosts: all
+- name: JBoss EAP installation
+  hosts: jboss-host
   become: true
-  vars:
-    jboss_home: /opt/jboss-eap
-    jboss_user: jboss
-    jboss_group: jboss
-    jboss_version: 7.3.0
-    jboss_download_url: http://download.jboss.org/wildfly/{{ jboss_version }}/wildfly-{{ jboss_version }}.tar.gz
   tasks:
-    - name: Create JBoss user and group
-      group:
-        name: "{{ jboss_group }}"
-        state: present
-      user:
-        name: "{{ jboss_user }}"
-        comment: "JBoss EAP User"
-        group: "{{ jboss_group }}"
-        createhome: yes
-    - name: Download JBoss EAP
+    - name: Download JBoss EAP binaries
       get_url:
-        url: "{{ jboss_download_url }}"
-        dest: /tmp/wildfly-{{ jboss_version }}.tar.gz
-    - name: Extract JBoss EAP
+        url: https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680250369_dee4083e2fd97edfb7d0a518e3b48f22
+        url_username: rh-ee-saraavin
+        url_password: A9772376s12!
+        dest: /opt
+
+    - name: Unzip the downloaded ZIP file
       unarchive:
-        src: /tmp/wildfly-{{ jboss_version }}.tar.gz
-        dest: "{{ jboss_home }}"
-        remote_src: true
-        owner: "{{ jboss_user }}"
-        group: "{{ jboss_group }}"
-    - name: Set JBoss EAP ownership and permissions
-      file:
-        path: "{{ jboss_home }}"
-        state: directory
-        owner: "{{ jboss_user }}"
-        group: "{{ jboss_group }}"
-        mode: "0755"
-        recurse: yes
-    - name: Start JBoss EAP
-      command: "{{ jboss_home }}/bin/standalone.sh -b 0.0.0.0"
+        src: /opt/jboss-eap-7.4.0.zip
+        dest: /opt
+        remote_arc: yes
+
+    - name: Create JBoss EAP user
+      user:
+        name: jboss-user
+        group: jboss-user
+        password: pa$$w0rd
+        home: /opt/jboss-eap-7.4.0
+        shell: "/bin/bash"
+
+   - name: Change owner & group of JBoss EAP directory
+     file:
+       path: /opt/jboss-eap-7.4.0
+       owner: jboss-user
+       group: jboss-user
+       recurse: yes
+
+   - name: Edit JBoss EAP configuration file
+     lineinfile:
+       state: present
+       path: /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf
+       regexp: "{{ item.regexp }}"
+       line: "{{ item.line }}"
+     with_items:
+       - {regexp: "^# JAVA_HOME=", line: 'JAVA_HOME="/opt/jdk-18.0.2.1"'}
+       - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/opt/jboss-eap-7.4"'}
+       - {regexp: "^# JBOSS_USER=", line: 'JBOSS_USER=jboss-user'}
+
+   - name: Update /etc/profile with JBOSS_HOME variable
+     lineinfile:
+       path: /etc/profile
+       state: present
+       line: "{{ item }}"
+     with_items:
+       - 'export JBOSS_HOME="/opt/jboss-eap-7.4"'
+       - 'export PATH=$PATH:$JBOSS_HOME/bin'
+
+   - name: Configure JBoss EAP as a service
+     command:
+       chdir: /opt/jboss-eap-7.4.0
+       cmd: "{{item }}"
+     with_items:
+       - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf /etc/default/
+       - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap-rhel.sh /etc/init.d/
+       - restorecon /etc/init.d/jboss-eap-rhel.sh
+       - chkconfig --add jboss-eap-rhel.sh 
+
+   - name: Start JBoss EAP Service
+     service:
+       name: jboss-eap-rhel
+       state: started
+       enabled: yes
