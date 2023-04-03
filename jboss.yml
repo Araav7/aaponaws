@@ -23,45 +23,45 @@
         home: /opt/jboss-eap-7.4.0
         shell: "/bin/bash"
 
-   - name: Change owner & group of JBoss EAP directory
-     file:
-       path: /opt/jboss-eap-7.4.0
-       owner: jboss-user
-       group: jboss-user
-       recurse: yes
+    - name: Change owner & group of JBoss EAP directory
+      file:
+        path: /opt/jboss-eap-7.4.0
+        owner: jboss-user
+        group: jboss-user
+        recurse: yes
 
-   - name: Edit JBoss EAP configuration file
-     lineinfile:
-       state: present
-       path: /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf
-       regexp: "{{ item.regexp }}"
-       line: "{{ item.line }}"
-     with_items:
-       - {regexp: "^# JAVA_HOME=", line: 'JAVA_HOME="/opt/jdk-18.0.2.1"'}
-       - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/opt/jboss-eap-7.4"'}
-       - {regexp: "^# JBOSS_USER=", line: 'JBOSS_USER=jboss-user'}
+    - name: Edit JBoss EAP configuration file
+      lineinfile:
+        state: present
+        path: /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - {regexp: "^# JAVA_HOME=", line: 'JAVA_HOME="/opt/jdk-18.0.2.1"'}
+        - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/opt/jboss-eap-7.4"'}
+        - {regexp: "^# JBOSS_USER=", line: 'JBOSS_USER=jboss-user'}
 
-   - name: Update /etc/profile with JBOSS_HOME variable
-     lineinfile:
-       path: /etc/profile
-       state: present
-       line: "{{ item }}"
-     with_items:
-       - 'export JBOSS_HOME="/opt/jboss-eap-7.4"'
-       - 'export PATH=$PATH:$JBOSS_HOME/bin'
+    - name: Update /etc/profile with JBOSS_HOME variable
+      lineinfile:
+        path: /etc/profile
+        state: present
+        line: "{{ item }}"
+      with_items:
+        - 'export JBOSS_HOME="/opt/jboss-eap-7.4"'
+        - 'export PATH=$PATH:$JBOSS_HOME/bin'
 
-   - name: Configure JBoss EAP as a service
-     command:
-       chdir: /opt/jboss-eap-7.4.0
-       cmd: "{{item }}"
-     with_items:
-       - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf /etc/default/
-       - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap-rhel.sh /etc/init.d/
-       - restorecon /etc/init.d/jboss-eap-rhel.sh
-       - chkconfig --add jboss-eap-rhel.sh 
+    - name: Configure JBoss EAP as a service
+      command:
+        chdir: /opt/jboss-eap-7.4.0
+        cmd: "{{item }}"
+      with_items:
+        - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf /etc/default/
+        - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap-rhel.sh /etc/init.d/
+        - restorecon /etc/init.d/jboss-eap-rhel.sh
+        - chkconfig --add jboss-eap-rhel.sh 
 
-   - name: Start JBoss EAP Service
-     service:
-       name: jboss-eap-rhel
-       state: started
-       enabled: yes
+    - name: Start JBoss EAP Service
+      service:
+        name: jboss-eap-rhel
+        state: started
+        enabled: yes
