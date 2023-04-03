@@ -13,7 +13,7 @@
       unarchive:
         src: /home/ec2-user/opt/jboss-eap-7.4.0.zip
         dest: /home/ec2-user/opt
-        remote_arc: yes
+        remote_src: yes
 
     - name: Create JBoss EAP user
       user:
