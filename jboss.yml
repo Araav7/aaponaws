@@ -7,12 +7,12 @@
         url: https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680499607_b3ead5edf3e80af88d73d19b4cc96de8
         url_username: rh-ee-saraavin
         url_password: A9772376s12!
-        dest: /opt
+        dest: /home/ec2-user/opt
 
     - name: Unzip the downloaded ZIP file
       unarchive:
-        src: /opt/jboss-eap-7.4.0.zip
-        dest: /opt
+        src: /home/ec2-user/opt/jboss-eap-7.4.0.zip
+        dest: /home/ec2-user/opt
         remote_arc: yes
 
     - name: Create JBoss EAP user
@@ -20,12 +20,12 @@
         name: jboss-user
         group: jboss-user
         password: pa$$w0rd
-        home: /opt/jboss-eap-7.4.0
+        home: /home/ec2-user/opt/jboss-eap-7.4.0
         shell: "/bin/bash"
 
     - name: Change owner & group of JBoss EAP directory
       file:
-        path: /opt/jboss-eap-7.4.0
+        path: /home/ec2-user/opt/jboss-eap-7.4.0
         owner: jboss-user
         group: jboss-user
         recurse: yes
@@ -33,12 +33,12 @@
     - name: Edit JBoss EAP configuration file
       lineinfile:
         state: present
-        path: /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf
+        path: /home/ec2-user/opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
       with_items:
-        - {regexp: "^# JAVA_HOME=", line: 'JAVA_HOME="/opt/jdk-18.0.2.1"'}
-        - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/opt/jboss-eap-7.4.0"'}
+        - {regexp: "^# JAVA_HOME=", line: 'JAVA_HOME="/home/ec2-user/opt/jdk-18.0.2.1"'}
+        - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/home/ec2-user/opt/jboss-eap-7.4.0"'}
         - {regexp: "^# JBOSS_USER=", line: 'JBOSS_USER=jboss-user'}
 
     - name: Update /etc/profile with JBOSS_HOME variable
@@ -47,16 +47,16 @@
         state: present
         line: "{{ item }}"
       with_items:
-        - 'export JBOSS_HOME="/opt/jboss-eap-7.4.0"'
+        - 'export JBOSS_HOME="/home/ec2-user/opt/jboss-eap-7.4.0"'
         - 'export PATH=$PATH:$JBOSS_HOME/bin'
 
     - name: Configure JBoss EAP as a service
       command:
-        chdir: /opt/jboss-eap-7.4.0
+        chdir: /home/ec2-user/opt/jboss-eap-7.4.0
         cmd: "{{item }}"
       with_items:
-        - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf /etc/default/
-        - cp /opt/jboss-eap-7.4.0/bin/init.d/jboss-eap-rhel.sh /etc/init.d/
+        - cp /home/ec2-user/opt/jboss-eap-7.4.0/bin/init.d/jboss-eap.conf /etc/default/
+        - cp /home/ec2-user/opt/jboss-eap-7.4.0/bin/init.d/jboss-eap-rhel.sh /etc/init.d/
         - restorecon /etc/init.d/jboss-eap-rhel.sh
         - chkconfig --add jboss-eap-rhel.sh 
 
