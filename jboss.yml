@@ -2,12 +2,12 @@
   hosts: 10.1.0.30
   become: true
   tasks:
-    - name: Download JBoss EAP binaries
-      get_url:
-        url: https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680499607_b3ead5edf3e80af88d73d19b4cc96de8
-        url_username: rh-ee-saraavin
-        url_password: A9772376s12!
-        dest: /home/ec2-user/opt
+    #- name: Download JBoss EAP binaries
+    #  get_url:
+    #    url: https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680499607_b3ead5edf3e80af88d73d19b4cc96de8
+    #    url_username: rh-ee-saraavin
+    #    url_password: A9772376s12!
+    #    dest: /home/ec2-user/opt
 
     - name: Unzip the downloaded ZIP file
       unarchive:
