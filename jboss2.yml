@@ -1,0 +1,13 @@
+- name: Unzip and install JBoss EAP
+  hosts: 10.1.0.30
+  become: yes 
+  tasks: 
+
+    - name: Unzip the downloaded ZIP file
+      unarchive:
+        src: /home/ec2-user/opt/jboss-eap-7.4.0.zip
+        dest: /home/ec2-user/opt
+        remote_src: yes
+
+    - name: Start JBoss EAP server
+      shell: "/home/ec2-user/opt/jboss-eap-7.4/bin/standalone.sh -b=0.0.0.0 -c=standalone-full.xml &"   
