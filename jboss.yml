@@ -18,7 +18,7 @@
     - name: Create JBoss EAP user
       user:
         name: jboss-user
-        group: jboss-user
+        group: jboss-group
         password: pa$$w0rd
         home: /home/ec2-user/opt/jboss-eap-7.4
         shell: "/bin/bash"
@@ -27,7 +27,7 @@
       file:
         path: /home/ec2-user/opt/jboss-eap-7.4
         owner: jboss-user
-        group: jboss-user
+        group: jboss-group
         recurse: yes
 
     - name: Edit JBoss EAP configuration file
