@@ -1,5 +1,5 @@
 - name: JBoss EAP installation
-  hosts: jboss-host
+  hosts: 10.1.0.30
   become: true
   tasks:
     - name: Download JBoss EAP binaries
@@ -38,7 +38,7 @@
         line: "{{ item.line }}"
       with_items:
         - {regexp: "^# JAVA_HOME=", line: 'JAVA_HOME="/opt/jdk-18.0.2.1"'}
-        - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/opt/jboss-eap-7.4"'}
+        - {regexp: "^# JBOSS_HOME=", line: 'JBOSS_HOME="/opt/jboss-eap-7.4.0"'}
         - {regexp: "^# JBOSS_USER=", line: 'JBOSS_USER=jboss-user'}
 
     - name: Update /etc/profile with JBOSS_HOME variable
@@ -47,7 +47,7 @@
         state: present
         line: "{{ item }}"
       with_items:
-        - 'export JBOSS_HOME="/opt/jboss-eap-7.4"'
+        - 'export JBOSS_HOME="/opt/jboss-eap-7.4.0"'
         - 'export PATH=$PATH:$JBOSS_HOME/bin'
 
     - name: Configure JBoss EAP as a service
