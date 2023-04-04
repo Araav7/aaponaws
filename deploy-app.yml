@@ -1,0 +1,12 @@
+---
+- name: Install JBoss EAP on RHEL 8
+  hosts: localhost
+  become: yes
+
+  tasks:
+
+  - name: Create Admin User redhat application
+    command: "sh {{ eap_home }}/bin/add-user.sh redhat password"
+
+  - name: Deploy the war file on one server 
+    command: "sh {{ eap_home }}/bin/jboss-cli.sh -u=redhat -p=password --controller=localhost:9990 --connect --command='deploy {{ eap_deploy_dir }}/{{ app_name }} --force'"

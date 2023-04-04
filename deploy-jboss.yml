@@ -1,0 +1,35 @@
+---
+- name: Install JBoss EAP on RHEL 8
+  hosts: localhost
+  become: yes
+
+  tasks:
+  - name: Update the package cache
+    dnf:
+      update_cache: yes
+
+  - name: Install the required dependencies for JBoss EAP
+    dnf:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - java-11-openjdk-devel
+      - unzip
+      - wget
+
+  - name: Download JBoss EAP 8.0.0
+    get_url:
+      url: "https://access.cdn.redhat.com/content/origin/files/sha256/90/9032ab531327f6754b6e0bfa0738fbe00d4256d6875229d0e26da7f1780df64b/jboss-eap-8.0.0.Beta.zip?_auth_=1680599520_13690f8b5664bc34aafffd97dd3926b1"
+      dest: "/home/ec2-user/opt"
+      mode: '0644'
+
+  - name: Extract the JBoss EAP archive
+    unarchive:
+      src: "/home/ec2-user/opt/jboss-eap-8.0.0.Beta.zip"
+      dest: "/home/ec2-user/opt"
+      remote_src: yes
+
+
+
+  - name: Start JBoss EAP server
+    command: "/home/ec2-user/opt/jboss-eap-8.0/bin/standalone.sh -b 0.0.0.0"
