@@ -19,18 +19,51 @@
 
   - name: Download JBoss EAP 8.0.0
     get_url:
-      url: "https://access.cdn.redhat.com/content/origin/files/sha256/90/9032ab531327f6754b6e0bfa0738fbe00d4256d6875229d0e26da7f1780df64b/jboss-eap-8.0.0.Beta.zip?_auth_=1680674991_44ff065916098c13cc3e3916d3d0f5f5"
+      url: "https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680703171_27b95b7fed67500dd138bb03514778fc"
       dest: "/home/ec2-user"
       mode: '0644'
 
   - name: Extract the JBoss EAP archive
     unarchive:
-      src: "/home/ec2-user/jboss-eap-8.0.0.Beta.zip"
+      src: "/home/ec2-user/jboss-eap-7.4.0.Beta.zip"
       dest: "/home/ec2-user"
       remote_src: yes
+      
+  - name: Modify JBoss EAP Configuration File
+    lineinfile:
+      state: present
+      path: "/home/ec2-user/jboss-eap-7.4/bin/init.d/jboss-eap.conf"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items: 
+      - {regexp: "^# JBOSS_CONFIG=", line: "JBOSS_CONFIG=standalone-ha.xml"}
+      - {regexp: "^# JBOSS_OPTS=", line: "JBOSS_OPTS=\"-b 0.0.0.0 -bprivate `hostname -i` -Djboss.node.name=10.1.0.64\""}
+    
+  - name: Copy JBoss Service Configuration File
+    copy:
+      src: "/home/ec2-user/jboss-eap-7.4/bin/init.d/jboss-eap.conf"
+      dest: "/etc/default/"
+      remote_src: True
+  
+    
+  - name: Copy JBoss EAP Service File
+    copy:
+      src: "/home/ec2-user/jboss-eap-7.4/bin/init.d/jboss-eap-rhel.sh"
+      dest: "/etc/init.d"
+      remote_src: True
+      mode: 0755
+
+  - name: Enable EAP service
+    service:
+      name: jboss-eap-rhel.sh
+      enabled: yes 
+
+  - name: Start EAP service
+    service:
+      name: jboss-eap-rhel
+      state: started
 
 
-
-  - name: Start JBoss EAP server
-    command: "/home/ec2-user/jboss-eap-8.0/bin/standalone.sh -b 0.0.0.0"
+  #- name: Start JBoss EAP server
+  #  command: "/home/ec2-user/jboss-eap-8.0/bin/standalone.sh -b 0.0.0.0"
     
