@@ -1,5 +1,5 @@
 ---
-- name: Install JBoss EAP on RHEL 8
+- name: Install JBoss EAP on RHEL 9
   hosts: 10.1.0.64
   become: yes
 
