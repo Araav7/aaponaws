@@ -19,7 +19,7 @@
 
   - name: Download JBoss EAP 8.0.0
     get_url:
-      url: "https://access.cdn.redhat.com/content/origin/files/sha256/90/9032ab531327f6754b6e0bfa0738fbe00d4256d6875229d0e26da7f1780df64b/jboss-eap-8.0.0.Beta.zip?_auth_=1680669296_c0ecbbc5e1844bb23cbd611a1907c763"
+      url: "https://access.cdn.redhat.com/content/origin/files/sha256/90/9032ab531327f6754b6e0bfa0738fbe00d4256d6875229d0e26da7f1780df64b/jboss-eap-8.0.0.Beta.zip?_auth_=1680670126_2ea9495ae6d14cd8807b40e0caabee04"
       dest: "/home/ec2-user"
       mode: '0644'
 
