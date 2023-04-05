@@ -31,5 +31,5 @@
       
 
   - name: Start JBoss EAP server
-    command: "/home/ec2-user/jboss-eap-8.0/bin/standalone.sh -b 0.0.0.0"
+    command: "/home/ec2-user/jboss-eap-7.4/bin/standalone.sh -b 0.0.0.0"
     
