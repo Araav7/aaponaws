@@ -1,12 +1,12 @@
 ---
 - name: Deploy App on JBoss EAP 
-  hosts: localhost
+  hosts: 10.1.0.64
   become: yes
 
   tasks:
 
   - name: Create Admin User redhat application
-    command: "sh /home/ec2-user/jboss-eap-8.0/bin/add-user.sh redhat password"
+    command: "sh /home/ec2-user/jboss-eap-7.4/bin/add-user.sh redhat password"
 
   - name: Deploy the war file on one server 
-    command: "sh /home/ec2-user/jboss-eap-8.0/bin/jboss-cli.sh -u=redhat -p=password --controller=localhost:9990 --connect --command='deploy /home/ec2-user/info-1.1.war --force'"
+    command: "sh /home/ec2-user/jboss-eap-7.4/bin/jboss-cli.sh -u=redhat -p=password --controller=localhost:9990 --connect --command='deploy /home/ec2-user/info-1.1.war --force'"
