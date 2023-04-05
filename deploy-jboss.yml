@@ -19,13 +19,13 @@
 
   - name: Download JBoss EAP 8.0.0
     get_url:
-      url: "https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680703171_27b95b7fed67500dd138bb03514778fc"
+      url: "https://access.cdn.redhat.com/content/origin/files/sha256/5f/5f1f0b7a389dedcd6f91ea3c8c6c9b723e9e8609bdf5720d4088e5469d46ad3a/jboss-eap-7.4.0.zip?_auth_=1680704308_e8d243eec65bce0562f1295a5fad0ed1"
       dest: "/home/ec2-user"
       mode: '0644'
 
   - name: Extract the JBoss EAP archive
     unarchive:
-      src: "/home/ec2-user/jboss-eap-7.4.0.Beta.zip"
+      src: "/home/ec2-user/jboss-eap-7.4.0.zip"
       dest: "/home/ec2-user"
       remote_src: yes
       
