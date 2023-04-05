@@ -28,7 +28,8 @@
       register: ec2_security_group
 
     - name: Launch a new EC2 instance
-      ec2:
+      amazon.aws.ec2_instance:
+        name: "public-compute-instance"
         instance_type: "{{ instance_type }}"
         image: "{{ image }}"
         group_id: "{{ ec2_security_group.group_id }}"
