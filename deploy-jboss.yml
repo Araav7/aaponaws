@@ -33,3 +33,5 @@
 
   - name: Start JBoss EAP server
     command: "/home/ec2-user/jboss-eap-8.0/bin/standalone.sh -b 0.0.0.0"
+    async: 10
+    poll: 0
